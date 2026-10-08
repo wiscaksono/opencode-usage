@@ -4,7 +4,8 @@ import SwiftUI
 
 @main
 struct OpencodeUsageApp: App {
-    @StateObject private var viewModel = UsageViewModel()
+    @StateObject private var viewModel = UsageViewModel.shared
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     private let logger = Logger(subsystem: "com.wiscaksono.opencode-usage", category: "App")
 
     /// Menu bar icon loaded from bundle Resources as a template image.
