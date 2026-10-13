@@ -6,6 +6,8 @@ struct ContentView: View {
     @State private var showSettings = false
     @FocusState private var focusedField: FocusableField?
 
+    private static let consoleURL = URL(string: "https://opencode.ai/console")!
+
     private var isSettingsVisible: Bool {
         viewModel.needsSetup || showSettings
     }
@@ -71,6 +73,10 @@ struct ContentView: View {
                 usageCard(title: "Weekly", item: stats.weekly)
                 Divider()
                 usageCard(title: "Monthly", item: stats.monthly)
+                if AppSettings.showCredits {
+                    Divider()
+                    creditsCard(balance: viewModel.balance)
+                }
             }
         } else if let error = viewModel.errorMessage {
             errorBanner(error)
@@ -109,6 +115,29 @@ struct ContentView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
+    }
+
+    // MARK: - Credits Card
+
+    private func creditsCard(balance: BalanceInfo?) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: "creditcard")
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+            Text("Available credits")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            Text(balance?.formatted ?? "—")
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.primary)
+                .monospacedDigit()
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .help(balance != nil ? "Top-up balance apart from the subscription" : "Top-up balance — shown when the API returns it")
     }
 
     // MARK: - Loading
@@ -158,6 +187,21 @@ struct ContentView: View {
 
             Spacer()
 
+            if !isSettingsVisible {
+                Button {
+                    NSWorkspace.shared.open(Self.consoleURL)
+                } label: {
+                    Label("Dashboard", systemImage: "square.grid.2x2")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .focused($focusedField, equals: .dashboard)
+                .help("Open OpenCode console")
+            }
+
+            Spacer()
+
             Button {
                 NSApplication.shared.terminate(nil)
             } label: {
@@ -185,5 +229,5 @@ struct ContentView: View {
 }
 
 enum FocusableField: Hashable {
-    case refresh, settings, quit
+    case refresh, dashboard, settings, quit
 }

@@ -9,6 +9,7 @@ struct SettingsView: View {
     @State private var errorMessage: String?
     @State private var isSaving = false
     @State private var progressAccent: Bool = AppSettings.progressAccent
+    @State private var showCredits: Bool = AppSettings.showCredits
     @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
@@ -53,6 +54,25 @@ struct SettingsView: View {
                     .onChange(of: progressAccent) { _, newValue in
                         AppSettings.setProgressAccent(newValue)
                     }
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                HStack {
+                    Text("Show available credits")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Toggle("", isOn: $showCredits)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                        .onChange(of: showCredits) { _, newValue in
+                            AppSettings.setShowCredits(newValue)
+                        }
+                }
+                Text("Awaiting upstream API support")
+                    .font(.system(size: 9))
+                    .foregroundStyle(.tertiary)
             }
         }
         .padding(.horizontal, 12)
