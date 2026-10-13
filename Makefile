@@ -27,7 +27,8 @@ bundle:
 	cp Support/Info.plist "$(BUNDLE_PATH)/Contents/Info.plist"
 	/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $(VERSION)" "$(BUNDLE_PATH)/Contents/Info.plist"
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(VERSION)" "$(BUNDLE_PATH)/Contents/Info.plist"
-	cp Sources/OpencodeUsage/Resources/opencode-logo.png "$(BUNDLE_PATH)/Contents/Resources/opencode-logo.png"
+	rm -rf "$(BUNDLE_PATH)/Contents/Resources/$(PROJECT_NAME)_$(PROJECT_NAME).bundle"
+	cp -R ".build/$(CONFIG)/$(PROJECT_NAME)_$(PROJECT_NAME).bundle" "$(BUNDLE_PATH)/Contents/Resources/"
 	codesign --force --sign - "$(BUNDLE_PATH)"
 
 run: build

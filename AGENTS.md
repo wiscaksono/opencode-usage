@@ -47,7 +47,7 @@ Data flow: `MenuBarExtra` → `ContentView` → `UsageViewModel` → `NetworkMan
 
 Storage split: user preferences live in `UserDefaults` via `AppSettings`; the API key lives in the Keychain via `KeychainStore`. Do not move secrets into `UserDefaults`.
 
-The app bundle is assembled manually by the Makefile `bundle` target: binary from `.build/`, plist from `Support/Info.plist`, logo PNG from SwiftPM resources. Version strings are stamped from git tags at bundle time.
+The app bundle is assembled manually by the Makefile `bundle` target: binary from `.build/`, plist from `Support/Info.plist`, resources from SwiftPM's generated `OpencodeUsage_OpencodeUsage.bundle` (copied into `Contents/Resources/` so `Bundle.module` resolves at runtime). Version strings are stamped from git tags at bundle time.
 
 ## Conventions
 
