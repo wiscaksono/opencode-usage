@@ -29,3 +29,11 @@ enum UsageLevel: Equatable {
         }
     }
 }
+
+/// Visual style for the macOS menu-bar status item.
+enum MenuBarStyle: String, Equatable {
+    /// Show the bundled OpenCode logo (template image, tinted by the menu bar).
+    case logo
+    /// Show colored percentage pills for rolling/weekly/monthly usage.
+    case badges
+}

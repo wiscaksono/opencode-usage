@@ -1,8 +1,9 @@
 import Foundation
 
 enum AppSettings {
-    private enum Keys {
+    enum Keys {
         static let progressAccent = "opencode_progress_accent"
+        static let menuBarStyle = "opencode_menu_bar_style"
     }
 
     static let keychain = KeychainStore()
@@ -30,5 +31,17 @@ enum AppSettings {
 
     static func setProgressAccent(_ value: Bool) {
         UserDefaults.standard.set(value, forKey: Keys.progressAccent)
+    }
+
+    /// Menu-bar visual style. Defaults to `.logo`.
+    static var menuBarStyle: MenuBarStyle {
+        guard let raw = UserDefaults.standard.string(forKey: Keys.menuBarStyle),
+              let style = MenuBarStyle(rawValue: raw)
+        else { return .logo }
+        return style
+    }
+
+    static func setMenuBarStyle(_ value: MenuBarStyle) {
+        UserDefaults.standard.set(value.rawValue, forKey: Keys.menuBarStyle)
     }
 }
