@@ -73,8 +73,10 @@ struct ContentView: View {
                 usageCard(title: "Weekly", item: stats.weekly)
                 Divider()
                 usageCard(title: "Monthly", item: stats.monthly)
-                Divider()
-                creditsCard(balance: viewModel.balance)
+                if AppSettings.showCredits {
+                    Divider()
+                    creditsCard(balance: viewModel.balance)
+                }
             }
         } else if let error = viewModel.errorMessage {
             errorBanner(error)

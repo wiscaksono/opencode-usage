@@ -3,6 +3,7 @@ import Foundation
 enum AppSettings {
     private enum Keys {
         static let progressAccent = "opencode_progress_accent"
+        static let showCredits = "opencode_show_credits"
     }
 
     static let keychain = KeychainStore()
@@ -30,5 +31,14 @@ enum AppSettings {
 
     static func setProgressAccent(_ value: Bool) {
         UserDefaults.standard.set(value, forKey: Keys.progressAccent)
+    }
+
+    /// Off by default: the API does not yet expose the prepaid balance.
+    static var showCredits: Bool {
+        UserDefaults.standard.bool(forKey: Keys.showCredits)
+    }
+
+    static func setShowCredits(_ value: Bool) {
+        UserDefaults.standard.set(value, forKey: Keys.showCredits)
     }
 }
