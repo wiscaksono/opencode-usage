@@ -25,6 +25,21 @@ enum AppSettings {
         keychain.delete()
     }
 
+    /// Token used for the usage request: an explicit API key wins, otherwise
+    /// the OAuth token from the local OpenCode database is used.
+    static var effectiveToken: String? {
+        apiKey ?? OpenCodeCredentials.accessToken()
+    }
+
+    /// Whether the app has any usable credential without showing the setup screen.
+    static var hasCredentials: Bool {
+        effectiveToken != nil
+    }
+
+    static var isUsingOpenCodeToken: Bool {
+        !hasAPIKey && OpenCodeCredentials.accessToken() != nil
+    }
+
     static var progressAccent: Bool {
         UserDefaults.standard.bool(forKey: Keys.progressAccent)
     }

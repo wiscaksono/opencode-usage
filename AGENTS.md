@@ -33,11 +33,11 @@ swift build && swift test && swiftformat --lint .
 ```
 Sources/OpencodeUsage/
   App/           Entry point, MenuBarExtra scene, icon loading
-  Views/         ContentView (popup), SettingsView (API key form)
+  Views/         ContentView (popup), SettingsView (API key form), SparklineView (history)
   ViewModels/    UsageViewModel — @MainActor ObservableObject, 300s Timer refresh
   Models/        UsageModels.swift — API response types + UsageLevel enum
   Services/      NetworkManager — URLSession fetch + JSON decoding
-  Storage/       AppSettings (UserDefaults prefs), KeychainStore (API key)
+  Storage/       AppSettings (prefs), KeychainStore (API key), OpenCodeCredentials, UsageHistoryStore
   Utilities/     Duration formatting helpers
 Tests/OpencodeUsageTests/
 Support/Info.plist   Template; version stamped by Makefile at bundle time
@@ -45,7 +45,7 @@ Support/Info.plist   Template; version stamped by Makefile at bundle time
 
 Data flow: `MenuBarExtra` → `ContentView` → `UsageViewModel` → `NetworkManager` → opencode API.
 
-Storage split: user preferences live in `UserDefaults` via `AppSettings`; the API key lives in the Keychain via `KeychainStore`. Do not move secrets into `UserDefaults`.
+Storage split: user preferences live in `UserDefaults` via `AppSettings`; the API key lives in the Keychain via `KeychainStore`. The fallback OAuth token is read read-only from OpenCode's own `opencode.db` on every request and is never persisted. Usage history (percentages only) lives in `~/Library/Application Support/OpenCode Usage/history.json`. Do not move secrets into `UserDefaults`.
 
 The app bundle is assembled manually by the Makefile `bundle` target: binary from `.build/`, plist from `Support/Info.plist`, logo PNG from SwiftPM resources. Version strings are stamped from git tags at bundle time.
 

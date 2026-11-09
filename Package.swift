@@ -12,6 +12,9 @@ let package = Package(
             path: "Sources/OpencodeUsage",
             resources: [
                 .copy("Resources/opencode-logo.png"),
+            ],
+            linkerSettings: [
+                .linkedLibrary("sqlite3"),
             ]
         ),
         .testTarget(
@@ -19,7 +22,10 @@ let package = Package(
             dependencies: [
                 "OpencodeUsage",
             ],
-            path: "Tests/OpencodeUsageTests"
+            path: "Tests/OpencodeUsageTests",
+            linkerSettings: [
+                .linkedLibrary("sqlite3"),
+            ]
         ),
     ]
 )

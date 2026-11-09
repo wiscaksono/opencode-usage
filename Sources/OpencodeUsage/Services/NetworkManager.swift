@@ -11,8 +11,8 @@ enum NetworkError: Error, LocalizedError {
         switch self {
         case .parseError: "Failed to parse server response"
         case .requestFailed: "Request failed"
-        case .notConfigured: "Not configured. Please open Settings and paste your API key."
-        case .authExpired: "Authentication expired. Please update your API key in Settings."
+        case .notConfigured: "Not configured. Sign in to OpenCode or paste an API key in Settings."
+        case .authExpired: "Authentication expired. Open OpenCode or update your API key in Settings."
         }
     }
 }
@@ -22,8 +22,8 @@ final class NetworkManager: @unchecked Sendable {
     private let endpoint = URL(string: "https://opencode.ai/zen/go/v1/usage")!
 
     func fetchUsage() async throws -> UsageStats {
-        guard let apiKey = AppSettings.apiKey else {
-            logger.error("API key not configured")
+        guard let apiKey = AppSettings.effectiveToken else {
+            logger.error("No OpenCode credential available")
             throw NetworkError.notConfigured
         }
 

@@ -12,6 +12,7 @@ struct SettingsView: View {
     @State private var showPercentages: Bool = AppSettings.menuBarStyle == .badges
     @State private var launchAtLogin: Bool = false
     @State private var launchAtLoginReady: Bool = false
+    @State private var usingOpenCodeToken: Bool = false
     @FocusState private var isTextFieldFocused: Bool
 
     /// Shown when macOS parks the launch-at-login registration until the
@@ -34,10 +35,14 @@ struct SettingsView: View {
 
     private var formView: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Paste your OpenCode API key:")
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            Text(
+                usingOpenCodeToken
+                    ? "OpenCode sign-in detected. Paste an API key to override:"
+                    : "Paste your OpenCode API key:"
+            )
+            .font(.system(size: 11))
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
 
             TextField("sk-...", text: $apiKey)
                 .font(.system(size: 11, design: .monospaced))
@@ -46,6 +51,13 @@ struct SettingsView: View {
                 .onChange(of: apiKey) { _, _ in
                     errorMessage = nil
                 }
+
+            if usingOpenCodeToken {
+                Text("Token source: ~/.local/share/opencode/opencode.db")
+                    .font(.system(size: 9))
+                    .foregroundStyle(.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
             Divider().padding(.vertical, 2)
 
@@ -107,6 +119,7 @@ struct SettingsView: View {
         .padding(.vertical, 8)
         .onAppear {
             isTextFieldFocused = true
+            usingOpenCodeToken = AppSettings.isUsingOpenCodeToken
             launchAtLogin = LaunchAtLogin.isEnabled
             launchAtLoginReady = true
             if LaunchAtLogin.needsApproval {
@@ -191,6 +204,7 @@ struct SettingsView: View {
         }
         isSaving = false
         isPresented = false
+        usingOpenCodeToken = false
         viewModel.credentialsUpdated()
     }
 }

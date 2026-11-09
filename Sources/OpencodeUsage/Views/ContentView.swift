@@ -71,6 +71,11 @@ struct ContentView: View {
                 usageCard(title: "Weekly", item: stats.weekly)
                 Divider()
                 usageCard(title: "Monthly", item: stats.monthly)
+                Divider()
+                SparklineView(
+                    samples: viewModel.history,
+                    currentPercent: stats.monthly.percent
+                )
             }
         } else if let error = viewModel.errorMessage {
             errorBanner(error)
